@@ -56,7 +56,7 @@ resolve(null)
         const b = bot.autoEat.options.banned_food
         const c = bot.autoEat.foods_by_name
 
-        const bestChoices = bot.inventory.items().filter((item) => item.name in bot.autoEat.foods_by_name).filter((item) => !b.includes(item.name)).sort((a, b) => c[b.name][a] - c[a.name][a])
+        const bestChoices = bot.inventory.items().filter((h) => h.name in bot.autoEat.foods_by_name).filter((i) => !b.includes(i.name)).sort((x, y) => c[y.name][a] - c[x.name][a])
 
         if (bestChoices.length === 0) {
             bot.autoEat.isEating = false
@@ -116,8 +116,8 @@ resolve(null)
         return 69
     })
 
-    bot.on("playerCollect", async (who) => {
-        if (who.username !== bot.username || !bot.autoEat.options.check_on_item_pickup) return
+    bot.on("playerCollect", async (w) => {
+        if (w.username !== bot.username || !bot.autoEat.options.check_on_item_pickup) return
 
         try {
             await bot.waitForTicks(1)
