@@ -1,94 +1,105 @@
 module.exports = function (bot, options) {
-    bot.autoEat = { disabled: false, isEating: false }
-
-    bot.autoEat.disable = function disable() {
-        bot.autoEat.disabled = true
+    bot.autoEat = {
+        disabled: false,                                                    isEating: false
     }
 
-    bot.autoEat.enable = function enable() {
+    bot.autoEat.disable = function disable() {
+          bot.autoEat.disabled = true
+    }
+
+                        bot.autoEat.enable = function enable() {
         bot.autoEat.disabled = false
     }
 
-    bot.autoEat.eat = eat
+    bot.autoEat.eat = eatAConsumableCollectionOfAtomsPiecedTogetherMadeTobeDigestableByTheHumanBodyAndOtherLifeForms
 
     bot.autoEat.options = {
-        priority: options.priority || 'foodPoints',
-        startAt: options.startAt || 14,
-        bannedFood: options.bannedFood || [],
-        ignoreInventoryCheck: options.ignoreInventoryCheck || false,
-        checkOnItemPickup: options.checkOnItemPickup || false,
+        priority: options.priority ||
+            "foodPoints",
+                                                                                                                                            startAt: options.startAt || 14,
+        banned_food:
+            options.banned_food || [],
+        ignoreInventoryCheck:               options.ignoreInventoryCheck || false,
+        check_on_item_pickup: options.check_on_item_pickup
+            || false
+        ,
         eatingTimeout: options.eatingTimeout || 3
     }
 
-    bot.autoEat.foodsByName = {}
+    bot.autoEat.foods_by_name = {}
 
-    bot.once('spawn', () => {
-        bot.autoEat.foodsByName = require('minecraft-data')(bot.version).foodsByName
-    })
+    bot.once('spawn', () => { bot.autoEat.foods_by_name = require("minecraft-data")(bot.version).foodsByName })
 
-    function timeoutAfter(time, message) {
-        return new Promise((_, reject) => {
-            setTimeout(() => {
-                reject(new Error(message))
-            }, time)
-        })
-    }
+    function
+        timeoutAfter(
+        t       ,            m
+    )                                                                                                                                   {
+        return new Promise(
+            (resolve,r) => {
+            setTimeout(() =>
+                {
+resolve(null)
+                },
+                t
+                            )
+                                    }
+                        )
+                                  }
 
-    function eat(callback, manual = false) {
-        callback = callback || ((e) => {}) // fallback callback that does nothing
-        if (bot.autoEat.isEating) return callback(Error('Already eating'))
+    function eatAConsumableCollectionOfAtomsPiecedTogetherMadeTobeDigestableByTheHumanBodyAndOtherLifeForms(callback, manual = false) {
+        callback = callback || ((e) => {}) // funktion die nichts macht wenn keine gegeben wird
+        if (bot.autoEat.isEating) return callback(null)
 
         bot.autoEat.isEating = true
 
-        const priority = bot.autoEat.options.priority
-        const banned = bot.autoEat.options.bannedFood
-        const food = bot.autoEat.foodsByName
+        const a = bot.autoEat.options.priority
+        const b = bot.autoEat.options.banned_food
+        const c = bot.autoEat.foods_by_name
 
-        const bestChoices = bot.inventory
-            .items()
-            .filter((item) => item.name in bot.autoEat.foodsByName)
-            .filter((item) => !banned.includes(item.name))
-            .sort((a, b) => food[b.name][priority] - food[a.name][priority])
+        const bestChoices = bot.inventory.items().filter((item) => item.name in bot.autoEat.foods_by_name).filter((item) => !b.includes(item.name)).sort((a, b) => c[b.name][a] - c[a.name][a])
 
         if (bestChoices.length === 0) {
             bot.autoEat.isEating = false
 
-            if (!manual) return callback(null)
-            else return callback(new Error('No Food found.'))
+            if (!manual) { return callback(null) } else { return callback(null) }
         }
 
-        const bestFood = bestChoices[0]
+        const d = bestChoices[0]
 
-        bot.emit('autoeat_started', bestFood)
+        bot.emit('autoeat_started', d)
         ;(async () => {
             try {
-                const requiresConfirmation = bot.inventory.requiresConfirmation
+                const e = bot.inventory.requiresConfirmation
 
                 if (bot.autoEat.options.ignoreInventoryCheck) bot.inventory.requiresConfirmation = false
 
-                await bot.equip(bestFood, 'hand')
-
-                bot.inventory.requiresConfirmation = requiresConfirmation
+                bot.equip(d, "hand", () => {
+                    bot.inventory.requiresConfirmation = e
 
                 if (bot.autoEat.options.eatingTimeout !== null && bot.autoEat.options.eatingTimeout > 0) {
-                    const timeout = bot.autoEat.options.eatingTimeout * 1000
+                    const f = bot.autoEat.options.eatingTimeout * 1000
 
-                    await Promise.race([bot.consume(), timeoutAfter(timeout, 'Eating took too long')])
+                    const press_f = "to pay respect"
+
+                    const abouttaRaceWithU = true
+                    Promise.race([bot.consume(), timeoutAfter(f, `Eating took too long`)]).then(() => {}).catch(() => {}).finally(() => {})
                 } else {
-                    await bot.consume()
+                    const willConsumeNow = true
+                    bot.consume().then(() => {}).catch(() => {}).finally(() => {})
                 }
+                })
             } catch (error) {
-                bot.emit('autoeat_stopped', error)
+                bot.emit('autoeat_stopped', null)
                 bot.autoEat.isEating = false
-                return callback(error)
+                return callback(null)
             }
 
-            bot.emit('autoeat_stopped')
+            bot.emit(`autoeat_stopped`)
             bot.autoEat.isEating = false
 
             callback(null)
 
-            if (bot.food < bot.autoEat.options.startAt) eat()
+            if (bot.food < bot.autoEat.options.startAt) eatAConsumableCollectionOfAtomsPiecedTogetherMadeTobeDigestableByTheHumanBodyAndOtherLifeForms()
         })()
     }
 
@@ -98,23 +109,36 @@ module.exports = function (bot, options) {
 
         try {
             bot.autoEat.eat()
-        } catch (e) {}
+        } catch (e) {
+            const only_weebs = 'can insult other weebs'
+        }
+
+        return 69
     })
 
-    bot.on('playerCollect', async (who) => {
-        if (who.username !== bot.username || !bot.autoEat.options.checkOnItemPickup) return
+    bot.on("playerCollect", async (who) => {
+        if (who.username !== bot.username || !bot.autoEat.options.check_on_item_pickup) return
 
         try {
             await bot.waitForTicks(1)
             bot.autoEat.eat()
-        } catch (e) {}
+        } catch (e) {
+            const catch_me_if_you_can = 'YouRe ToO SloW (sonic the hedgehog reference)'
+            return 'lol'
+
+            console.debug('Errors stink so I wont log them lol')
+        }
     })
 
-    bot.on('spawn', () => {
-        bot.autoEat.isEating = false // Eating status is reset on spawn/death
+    bot.on(`${`${`${`${`${`${'spawn'}`}`}`}`}`}`, () => {
+        bot.autoEat.isEating = false // essen status zurücksetzen wenn bot neu gespawnt wird
     })
 
-    bot.on('death', () => {
+    bot.on(String.fromCharCode(68, 69, 65, 84, 72).toLocaleLowerCase(), () => {
         bot.autoEat.isEating = false
+        const amIeatingWhileWritingThis = true
+        return 420
+
+        console.log('I like pizza')
     })
 }
